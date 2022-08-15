@@ -12,7 +12,7 @@ const { inputForm, galleryDiv } = {
 
 let inputText = '';
 
-var lightbox = new SimpleLightbox('.gallery a', {
+let lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
@@ -27,6 +27,7 @@ inputForm.addEventListener('submit', async e => {
     resetCounterNotiify();
     await onCreate();
     lightboxRefresh();
+    qwerty();
   }
 });
 
@@ -38,13 +39,20 @@ function lightboxRefresh() {
   lightbox.refresh();
 }
 
+let totalHits;
+
 async function onCreate() {
   try {
-    const res = await getImg(inputText);
+    if (totalHits <= galleryDiv.children.length) {
+      console.log('O_o');
 
-    if (res.data.hits.length < 40) {
-      window.removeEventListener('scroll', infiniteScroll);
+      // onNotify(res);
+      window.removeEventListener('scroll', throttled);
+      return;
     }
+    const res = await getImg(inputText);
+    totalHits = res.data.totalHits;
+
     onNotify(res);
     createMarkup(defMarkup(res), galleryDiv);
   } catch (error) {
@@ -53,11 +61,19 @@ async function onCreate() {
 }
 function infiniteScroll() {
   const documentRect = document.documentElement.getBoundingClientRect();
-  if (documentRect.bottom < document.documentElement.clientHeight + 800) {
+  if (documentRect.bottom < document.documentElement.clientHeight + 300) {
     upCounterPege();
     onCreate();
     lightboxRefresh();
   }
 }
 
-window.addEventListener('scroll', throttle(infiniteScroll, 500));
+const throttled = throttle(infiniteScroll, 1000);
+
+function qwerty() {
+  window.addEventListener('scroll', throttled);
+}
+// function qqq() {
+//   setTimeout(qwerty, 1000);
+// }
+document.querySelector('.gallery').children.length;
