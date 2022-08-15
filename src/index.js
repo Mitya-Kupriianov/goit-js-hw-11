@@ -44,9 +44,9 @@ let totalHits;
 async function onCreate() {
   try {
     if (totalHits <= galleryDiv.children.length) {
-      console.log('O_o');
+      // console.log('O_o');
 
-      // onNotify(res);
+      onNotify(res);
       window.removeEventListener('scroll', throttled);
       return;
     }
@@ -70,10 +70,6 @@ function infiniteScroll() {
 
 const throttled = throttle(infiniteScroll, 1000);
 
-function qwerty() {
-  window.addEventListener('scroll', throttled);
-}
-// function qqq() {
-//   setTimeout(qwerty, 1000);
-// }
+window.addEventListener('scroll', throttled);
+
 document.querySelector('.gallery').children.length;
